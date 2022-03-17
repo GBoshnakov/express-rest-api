@@ -1,0 +1,1 @@
+const Furniture = require('../models/Furniture');
