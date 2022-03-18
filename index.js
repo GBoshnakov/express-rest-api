@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const catalogController = require('./controllers/furniture');
+const userController = require('./controllers/users');
 const cors = require('./middlewares/cors');
 
 
@@ -24,6 +25,7 @@ async function start() {
     app.use(cors());
 
     app.use('/data/catalog', catalogController);
+    app.use('/users', userController);
 
 
     app.get('/', (req, res) => {

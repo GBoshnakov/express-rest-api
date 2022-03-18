@@ -1,8 +1,16 @@
 const { model, Schema, Types: { ObjectId } } = require('mongoose');
 
 const schema = new Schema({
-    make: { type: String, required: [true, 'Make is required'] },
-    model: { type: String, required: [true, 'Model is required'] },
+    make: {
+        type: String,
+        required: [true, 'Make is required'],
+        minlength: [4, 'Make must be at least 4 characters long']
+    },
+    model: {
+        type: String,
+        required: [true, 'Model is required'],
+        minlength: [4, 'Model must be at least 4 characters long']
+    },
     year: {
         type: Number,
         required: [true, 'Year is required'],
