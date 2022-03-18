@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const furnitureService = require('../services/furnitures');
 const mapErrors = require('../utils/mappers');
+const { isUser, isOwner } = require('../middlewares/guards');
+const preload = require('../middlewares/preloader');
 
 router.get('/', async (req, res) => {
     try {
@@ -13,11 +15,11 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', preload(), (req, res) => {
     const itemId = req.params.id;
 
     try {
-        const result = await furnitureService.getById(itemId);
+        const result = res.locals.item;
         res.json(result);
 
     } catch (error) {
@@ -27,7 +29,7 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-router.post('/', async (req, res) => {
+router.post('/', isUser(), async (req, res) => {
 
     const furniture = {
         make: req.body.make,
@@ -36,7 +38,8 @@ router.post('/', async (req, res) => {
         description: req.body.description,
         price: Number(req.body.price),
         img: req.body.img,
-        material: req.body.material
+        material: req.body.material,
+        owner: req.user._id
     };
 
     try {
@@ -49,7 +52,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', preload(), isOwner(), async (req, res) => {
     const itemId = req.params.id;
     const furniture = {
         make: req.body.make,
@@ -58,7 +61,7 @@ router.put('/:id', async (req, res) => {
         description: req.body.description,
         price: Number(req.body.price),
         img: req.body.img,
-        material: req.body.material
+        material: req.body.material,
     };
 
     try {
@@ -72,7 +75,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', isOwner(), async (req, res) => {
     const itemId = req.params.id;
 
     try {

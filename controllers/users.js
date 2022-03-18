@@ -1,8 +1,9 @@
 const router = require('express').Router();
 const mapErrors = require('../utils/mappers');
 const { login, register, logout } = require('../services/users');
+const { isGuest } = require('../middlewares/guards');
 
-router.post('/register', async (req, res) => {
+router.post('/register', isGuest(), async (req, res) => {
 
     try {
         if (req.body.email.trim() == '' || req.body.password.trim() == '') {
@@ -18,7 +19,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
-router.post('/login', async (req, res) => {
+router.post('/login', isGuest(), async (req, res) => {
 
     try {
         if (req.body.email.trim() == '' || req.body.password.trim() == '') {

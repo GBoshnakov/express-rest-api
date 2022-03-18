@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const catalogController = require('./controllers/furniture');
 const userController = require('./controllers/users');
 const cors = require('./middlewares/cors');
+const auth = require('./middlewares/auth');
 
 
 start();
@@ -23,6 +24,7 @@ async function start() {
     const app = express();
     app.use(express.json());
     app.use(cors());
+    app.use(auth());
 
     app.use('/data/catalog', catalogController);
     app.use('/users', userController);

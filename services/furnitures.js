@@ -5,7 +5,7 @@ async function getAll() {
 }
 
 async function getById(id) {
-    return Furniture.findById(id);
+    return Furniture.findById(id).lean();
 }
 
 async function createNew(data) {
