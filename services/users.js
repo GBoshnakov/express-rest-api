@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const TokenBlacklist = require('../models/TokenBlacklist');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -27,12 +28,16 @@ async function login(email, password) {
     const match = await bcrypt.compare(password, user.hashedPassword);
     if (!match) {
         throw new Error('Incorrect email or password');
-    } 
+    }
     return createSession(user);
 }
 
-function logout(token) {
+async function logout(token) {
     blacklist.push(token);
+
+    const tokenBlacklist = new TokenBlacklist({ token });
+
+    await tokenBlacklist.save({ token });
 }
 
 function createSession(user) {
@@ -46,9 +51,12 @@ function createSession(user) {
     };
 }
 
-function verifySession(token) {
-    if (blacklist.includes(token)) {
-        throw new Error('Token is invalidated');
+async function verifySession(token) {
+
+    const result = await TokenBlacklist.findOne({ token });
+    
+    if (result) {
+        throw new Error('Token is blacklisted');
     }
 
     const payload = jwt.verify(token, JWT_SECRET);

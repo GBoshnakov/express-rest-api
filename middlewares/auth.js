@@ -1,11 +1,11 @@
 const { verifySession } = require('../services/users');
 
-module.exports = () => (req, res, next) => {
+module.exports = () => async (req, res, next) => {
     const token = req.headers['x-authorization'];
 
     try {
         if (token) {
-            const userData = verifySession(token);
+            const userData = await verifySession(token);
             req.user = userData;
         }
         next();
