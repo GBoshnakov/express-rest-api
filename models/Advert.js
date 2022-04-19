@@ -1,21 +1,23 @@
 const { model, Schema, Types: { ObjectId } } = require('mongoose');
 
 const schema = new Schema({
-    make: {
+    title: {
         type: String,
-        required: [true, 'Make is required'],
-        minlength: [4, 'Make must be at least 4 characters long']
+        required: [true, 'Title is required'],
+        minlength: [4, 'Title must be at least 4 characters long']
     },
-    model: {
+    category: {
         type: String,
-        required: [true, 'Model is required'],
-        minlength: [4, 'Model must be at least 4 characters long']
+        required: [true, 'Category is required'],
+        enum: {
+            values: ['electronics', 'vehicles', 'tools', 'gadgets', 'home', 'garden'],
+            message: 'Invalid category'
+        }
     },
-    year: {
+    image: {
         type: Number,
-        required: [true, 'Year is required'],
-        min: [1950, 'Year must be between 1950 and 2050'],
-        max: [2050, 'Year must be between 1950 and 2050']
+        required: [true, 'ImageURL is required'],
+        match: [/^https?:\/\/[\w]/, 'Image must be a valid URL address']
     },
     description: {
         type: String,
@@ -27,10 +29,8 @@ const schema = new Schema({
         required: [true, 'Price is required'],
         min: [0, 'Price must be greater than 0']
     },
-    img: { type: String, required: [true, 'Image is required'] },
-    material: { type: String },
     owner: { type: ObjectId, ref: 'User' }
-});
+}, { timestamps: { createdAt: 'created_at' } });
 
 const Furniture = model('Furniture', schema);
 

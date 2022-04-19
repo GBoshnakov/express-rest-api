@@ -1,4 +1,4 @@
-const { getById } = require('../services/furnitures');
+const { getById } = require('../services/adverts');
 
 module.exports = () => async (req, res, next) => {
     const id = req.params.id;

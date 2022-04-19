@@ -1,12 +1,12 @@
 const router = require('express').Router();
-const furnitureService = require('../services/furnitures');
+const advertService = require('../services/adverts');
 const mapErrors = require('../utils/mappers');
 const { isUser, isOwner } = require('../middlewares/guards');
 const preload = require('../middlewares/preloader');
 
 router.get('/', async (req, res) => {
     try {
-        const result = await furnitureService.getAll();
+        const result = await advertService.getAll();
         res.json(result);
     } catch (error) {
         console.error(error);
@@ -31,19 +31,17 @@ router.get('/:id', preload(), (req, res) => {
 
 router.post('/', isUser(), async (req, res) => {
 
-    const furniture = {
-        make: req.body.make,
-        model: req.body.model,
-        year: Number(req.body.year),
-        description: req.body.description,
+    const advert = {
+        title: req.body.title,
+        category: req.body.category,
         price: Number(req.body.price),
-        img: req.body.img,
-        material: req.body.material,
+        image: req.body.image,
+        description: req.body.description,
         owner: req.user._id
     };
 
     try {
-        const result = await furnitureService.createNew(furniture);
+        const result = await advertService.createNew(advert);
         res.status(201).json(result);
     } catch (error) {
         console.error(error);
@@ -54,18 +52,17 @@ router.post('/', isUser(), async (req, res) => {
 
 router.put('/:id', preload(), isOwner(), async (req, res) => {
     const itemId = req.params.id;
-    const furniture = {
-        make: req.body.make,
-        model: req.body.model,
-        year: Number(req.body.year),
-        description: req.body.description,
+
+    const advert = {
+        title: req.body.title,
+        category: req.body.category,
         price: Number(req.body.price),
-        img: req.body.img,
-        material: req.body.material,
+        image: req.body.image,
+        description: req.body.description,
     };
 
     try {
-        const result = await furnitureService.updateById(itemId, furniture);
+        const result = await advertService.updateById(itemId, advert);
         res.json(result);
 
     } catch (error) {
@@ -79,7 +76,7 @@ router.delete('/:id', isOwner(), async (req, res) => {
     const itemId = req.params.id;
 
     try {
-        await furnitureService.deleteById(itemId);
+        await advertService.deleteById(itemId);
         res.status(204).end();
     } catch (error) {
         console.error(error);

@@ -1,23 +1,23 @@
-const Furniture = require('../models/Furniture');
+const Advert = require('../models/Advert');
 
 async function getAll() {
-    return Furniture.find({});
+    return Advert.find({});
 }
 
 async function getById(id) {
-    return Furniture.findById(id).lean();
+    return Advert.findById(id).lean();
 }
 
 async function createNew(data) {
-    const furniture = new Furniture(data);
+    const advert = new Advert(data);
 
-    await furniture.save();
+    await advert.save();
 
-    return furniture;
+    return advert;
 }
 
 async function updateById(id, data) {
-    const existing = await Furniture.findById(id);
+    const existing = await Advert.findById(id);
 
     existing.make = data.make;
     existing.model = data.model;
@@ -33,7 +33,7 @@ async function updateById(id, data) {
 }
 
 async function deleteById(id) {
-    await Furniture.findByIdAndDelete(id);
+    await Advert.findByIdAndDelete(id);
 }
 
 module.exports = {
