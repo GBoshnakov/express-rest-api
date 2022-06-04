@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const catalogController = require('./controllers/furniture');
+const catalogController = require('./controllers/adverts');
 const userController = require('./controllers/users');
 const cors = require('./middlewares/cors');
 const auth = require('./middlewares/auth');
